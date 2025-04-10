@@ -3,10 +3,11 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\NewsCategoryController;
 use App\Http\Controllers\Api\NewsController;
+use App\Http\Controllers\Api\BookmarkController;
 use App\Http\Controllers\Api\ReactionController;
 use App\Http\Controllers\Api\NewsCourceController;
+use App\Http\Controllers\Api\NewsCategoryController;
 use App\Http\Controllers\Api\UserInterestController;
 
 Route::get('/user', function (Request $request) {
@@ -40,14 +41,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::post('/news/comments', [NewsController::class, 'addComment']); //Working fine
-    
+
     Route::post('/react', [ReactionController::class, 'react']); //Working fine
 
-    Route::post('/user/interests', [UserInterestController::class, 'store']);
+    Route::post('/user/interests', [UserInterestController::class, 'store']); // Working fine
 
-    Route::get('/news-categories', [NewsCategoryController::class, 'index']);
-
-
+    Route::get('/news-categories', [NewsCategoryController::class, 'index']); // Working fine
 
 
+
+
+    Route::post('/bookmark/{news}', [BookmarkController::class, 'toggle']); // Save or unsave
+    Route::get('/bookmarks', [BookmarkController::class, 'myBookmarks']);
 });

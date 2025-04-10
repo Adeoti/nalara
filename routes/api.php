@@ -22,17 +22,20 @@ Route::post('login', [AuthController::class, 'login']);
 Route::get('/news/{news}/comments', [NewsController::class, 'getComments']); //Working fine
 Route::get('/reactions/{type}/{id}', [ReactionController::class, 'getReactions']); //Working fine
 
+Route::get('/news', [NewsController::class, 'index']); //Working fine
+Route::get('/news-sources', [NewsCourceController::class, 'allSources']); //Working fine
+Route::get('/news-source/{source}', [NewsCourceController::class, 'newsBySource']); //Working fine
+
 
 
 // Inside the AUTH Gate
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('/news', [NewsController::class, 'index']); //Working fine
+    
     Route::get('/news/from-followed-sources', [NewsController::class, 'newsFromFollowedSources']); //Working fine
 
 
-    Route::get('/news-sources', [NewsCourceController::class, 'allSources']); //Working fine
-    Route::get('/news-source/{source}', [NewsCourceController::class, 'newsBySource']); //Working fine
+   
     Route::get('/followed-sources', [NewsCourceController::class, 'followedSources']); //Working fine
 
 

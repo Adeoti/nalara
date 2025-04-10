@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Comment;
+use App\Models\Bookmark;
 use App\Models\NewsView;
 use App\Models\NewsSource;
 use Illuminate\Database\Eloquent\Model;
@@ -48,6 +49,12 @@ class News extends Model
     {
         return $this->belongsTo(NewsCategory::class, 'news_category_id');
     }
+
+    public function bookmarks()
+    {
+        return $this->hasMany(Bookmark::class);
+    }
+
 
     public function reactions()
     {

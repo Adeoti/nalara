@@ -14,15 +14,70 @@ class NewsController extends Controller
 {
 
     //
+    // public function index()
+    // {
+    //     $news = News::all();
+    //     if ($news->isEmpty()) {
+    //         return response()->json(['message' => 'No news found'], 404);
+    //     }
+    //     return response()->json($news);
+    // }
+
+
+    // public function index()
+    // {
+    //     $news = News::with('source')->with('newsCategory')->limit(2)->orderBy('id', 'desc')->get();
+
+    //     if ($news->isEmpty()) {
+    //         return response()->json(['message' => 'No news found'], 404);
+    //     }
+
+    //     // If user is authenticated, include is_bookmarked flag
+    //     $user = auth()->user();
+
+    //     $news = $news->map(function ($item) use ($user) {
+    //         $item->is_bookmarked = false;
+
+    //         if ($user) {
+    //             $item->is_bookmarked = $item->bookmarks()->where('user_id', $user->id)->exists();
+    //         }
+
+    //         // Optionally hide the news_source_id and only return the full source
+    //         unset($item->news_source_id);
+
+    //         return $item;
+    //     });
+
+    //     return response()->json($news);
+    // }
     public function index()
     {
-        $news = News::all();
+        $news = News::with(['source', 'newsCategory', 'comments', 'reactions'])
+                    ->orderBy('id', 'desc')
+                    ->get();
+    
         if ($news->isEmpty()) {
             return response()->json(['message' => 'No news found'], 404);
         }
+    
+        $user = auth()->user();
+    
+        $news = $news->map(function ($item) use ($user) {
+            $item->is_bookmarked = false;
+    
+            if ($user) {
+                $item->is_bookmarked = $item->bookmarks()->where('user_id', $user->id)->exists();
+            }
+    
+            // Hide foreign key
+            unset($item->news_source_id);
+    
+            return $item;
+        });
+    
         return response()->json($news);
     }
-
+    
 
     // GET /api/news/from-followed-sources
     public function newsFromFollowedSources(Request $request)
@@ -40,48 +95,48 @@ class NewsController extends Controller
 
 
     public function show(Request $request, $id)
-{
-    $news = News::findOrFail($id);
+    {
+        $news = News::findOrFail($id);
 
-    $alreadyViewed = false;
+        $alreadyViewed = false;
 
-    // Check if the user is authenticated
-    if ($request->user()) {
-        // Check if the logged-in user has already viewed this news
-        $alreadyViewed = \App\Models\NewsView::where('news_id', $news->id)
-            ->where('user_id', $request->user()->id)
-            ->exists();
+        // Check if the user is authenticated
+        if ($request->user()) {
+            // Check if the logged-in user has already viewed this news
+            $alreadyViewed = \App\Models\NewsView::where('news_id', $news->id)
+                ->where('user_id', $request->user()->id)
+                ->exists();
 
-        if (!$alreadyViewed) {
-            // Create a new view record for the authenticated user
-            NewsView::create([
-                'news_id' => $news->id,
-                'user_id' => $request->user()->id,
-                'ip_address' => $request->ip(),
-            ]);
+            if (!$alreadyViewed) {
+                // Create a new view record for the authenticated user
+                NewsView::create([
+                    'news_id' => $news->id,
+                    'user_id' => $request->user()->id,
+                    'ip_address' => $request->ip(),
+                ]);
+            }
+        } else {
+            // Track views for guest users using their IP address
+            $alreadyViewed = \App\Models\NewsView::where('news_id', $news->id)
+                ->where('ip_address', $request->ip())
+                ->exists();
+
+            if (!$alreadyViewed) {
+                // Create a new view record for the guest user using their IP
+                NewsView::create([
+                    'news_id' => $news->id,
+                    'user_id' => null, // No user ID for guests
+                    'ip_address' => $request->ip(),
+                ]);
+            }
         }
-    } else {
-        // Track views for guest users using their IP address
-        $alreadyViewed = \App\Models\NewsView::where('news_id', $news->id)
-            ->where('ip_address', $request->ip())
-            ->exists();
 
-        if (!$alreadyViewed) {
-            // Create a new view record for the guest user using their IP
-            NewsView::create([
-                'news_id' => $news->id,
-                'user_id' => null, // No user ID for guests
-                'ip_address' => $request->ip(),
-            ]);
-        }
+        // Return the news details and the view count (total unique readers)
+        return response()->json([
+            'news' => $news,
+            'readers_count' => NewsView::where('news_id', $news->id)->count(), // Count the unique views
+        ]);
     }
-
-    // Return the news details and the view count (total unique readers)
-    return response()->json([
-        'news' => $news,
-        'readers_count' => NewsView::where('news_id', $news->id)->count(), // Count the unique views
-    ]);
-}
 
 
     public function addComment(Request $request)

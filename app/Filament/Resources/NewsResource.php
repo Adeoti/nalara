@@ -86,6 +86,7 @@ class NewsResource extends Resource
                 Tables\Columns\TextColumn::make('author')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('url')
+                    ->copyable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('published_at')
                     ->dateTime()

@@ -16,6 +16,7 @@ class NewsSource extends Model
         'base_url',
         'feed_url',
         'logo',
+        'about',
         'is_active',
     ];
 

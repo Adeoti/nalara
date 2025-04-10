@@ -7,6 +7,7 @@ use App\Filament\Resources\NewsSourceResource\RelationManagers;
 use App\Models\NewsSource;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -43,6 +44,9 @@ class NewsSourceResource extends Resource
                         Forms\Components\TextInput::make('feed_url')
                             ->maxLength(255)
                             ->default(null),
+                        Textarea::make('about')
+                                ->columnSpanFull()
+                        ,
                         Forms\Components\FileUpload::make('logo')
                             ->required()
                             ->image()

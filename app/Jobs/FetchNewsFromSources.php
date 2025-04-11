@@ -88,16 +88,15 @@ class FetchNewsFromSources implements ShouldQueue
                 foreach ($taxonomy as $term) {
                     if ($term['taxonomy'] === 'category') {
                         $cleanName = ucwords(strtolower(trim(html_entity_decode($term['name']))));
-                        
+
                         $category = NewsCategory::firstOrCreate(
                             ['name' => $cleanName],
                             ['slug' => Str::slug($cleanName)]
                         );
-                    
+
                         $categoryId = $category->id;
                         break 2;
                     }
-                    
                 }
             }
         }
@@ -107,7 +106,8 @@ class FetchNewsFromSources implements ShouldQueue
         News::create([
             'news_source_id' => $source->id,
             'news_category_id' => $categoryId,
-            'title' => $item['title']['rendered'],
+            // 'title' => $item['title']['rendered'],
+            'title' => html_entity_decode($item['title']['rendered'], ENT_QUOTES | ENT_HTML5, 'UTF-8'),
             'slug' => $slug,
             'summary' => strip_tags($item['excerpt']['rendered']),
             'content' => $item['content']['rendered'],

@@ -68,7 +68,8 @@ class NewsResource extends Resource
                 Tables\Columns\TextColumn::make('newsSource.name')
                     ->numeric()
                     ->sortable(),
-                ImageColumn::make('newsSource.logo')
+                TextColumn::make('newsSource.logo')
+                    ->copyable()
                     ->label('Source Logo'),
                 ImageColumn::make('image')
                     ->label('Featured Image'),

@@ -53,7 +53,7 @@ class NewsController extends Controller
     public function index()
     {
         $news = News::with(['source', 'newsCategory', 'comments', 'reactions'])
-                    ->orderBy('id', 'desc')
+                    ->orderBy('published_at', 'desc')
                     ->get();
     
         if ($news->isEmpty()) {

@@ -75,7 +75,7 @@ class NewsResource extends Resource
                 TextColumn::make('newsCategory.name')
                     ->searchable(),
                 ToggleColumn::make('is_trending')
-                    ->boolean(),
+                    ,
 
                 Tables\Columns\TextColumn::make('title')
                     ->toggleable()

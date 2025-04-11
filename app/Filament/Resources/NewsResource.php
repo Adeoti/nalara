@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\NewsResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -73,7 +74,8 @@ class NewsResource extends Resource
                     ->label('Featured Image'),
                 TextColumn::make('newsCategory.name')
                     ->searchable(),
-
+                ToggleColumn::make('is_trending')
+                    ->boolean(),
 
                 Tables\Columns\TextColumn::make('title')
                     ->toggleable()
@@ -93,8 +95,7 @@ class NewsResource extends Resource
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_featured')
                     ->boolean(),
-                Tables\Columns\IconColumn::make('is_trending')
-                    ->boolean(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

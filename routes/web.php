@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CentralAppManagerController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 
 Route::get('/fetch', function () {
@@ -14,4 +14,4 @@ Route::get('/fetch', function () {
 
 
 
-Route::get('/central-apps', [CentralAppManagerController::class, 'index'])->name('central.apps.index');
+Route::get('/', [CentralAppManagerController::class, 'index'])->name('central.apps.index');

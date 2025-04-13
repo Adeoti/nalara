@@ -67,6 +67,7 @@ class CentralAppManagerResource extends Resource
                     ->toggleable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('group')
+                    ->sortable()
                     ->searchable(),
                 ImageColumn::make('logo')
                     ->searchable(),

@@ -62,6 +62,7 @@ class CentralAppManagerResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('link')
                     ->copyable()
+                    ->limit(5)
                     ->words(6, '...')
                     ->toggleable()
                     ->searchable(),

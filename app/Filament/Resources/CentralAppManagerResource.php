@@ -46,7 +46,7 @@ class CentralAppManagerResource extends Resource
                 ->imageEditor()
                 ->uploadingMessage('Uploading logo...')
                 ->image(),
-            Hidden::make(Auth::id()),
+            Hidden::make('user_id')->default(Auth::user()->id),
             Forms\Components\Toggle::make('is_active')
                 ->required(),
                ])->columns(2),

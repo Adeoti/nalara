@@ -36,6 +36,7 @@ class CentralAppManagerResource extends Resource
                 ->required()
                 ->maxLength(255),
             Forms\Components\TextInput::make('link')
+                
                 ->required()
                 ->maxLength(255),
             Forms\Components\TextInput::make('group')
@@ -61,6 +62,7 @@ class CentralAppManagerResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('link')
                     ->copyable()
+                    ->words(6, '...')
                     ->toggleable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('group')

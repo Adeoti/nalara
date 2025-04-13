@@ -10,6 +10,7 @@ class CentralAppManager extends Model
         'name',
         'link',
         'group',
+        'user_id',
         'logo',
         'created_by',
         'is_active',
